@@ -3,10 +3,10 @@ import path from "path";
 import { keyDerive } from "@zondax/filecoin-signing-tools/js";
 import { Contract as HelloWorld } from "./assets/hello_world/definition";
 
-jest.setTimeout(60 * 1000);
-
 import { init } from "../src/client";
-import { Contract } from "../src/index";
+import { ContractManager } from "../src/index";
+
+jest.setTimeout(60 * 1000);
 
 let seed, nodeUrl, nodeToken;
 let cidToUse, contractAddress;
@@ -30,7 +30,7 @@ test("Hello World - Install actor", async () => {
   const account = keyDerive(seed, "m/44'/461'/0/0/1", "");
 
   init(nodeUrl, nodeToken);
-  const resp = await Contract.install(account, path.join(__dirname, "./assets/hello_world/binary.wasm"));
+  const resp = await ContractManager.install(account, path.join(__dirname, "./assets/hello_world/binary.wasm"));
   const { cid, isInstalled } = resp;
 
   expect(cid).toBeDefined();
@@ -45,7 +45,7 @@ test("Hello World - Create actor", async () => {
   const account = keyDerive(seed, "m/44'/461'/0/0/1", "");
 
   init(nodeUrl, nodeToken);
-  const resp = await Contract.instantiate(account, cidToUse, "0");
+  const resp = await ContractManager.instantiate(account, cidToUse, "0");
   const { IDAddress, RobustAddress } = resp;
 
   expect(IDAddress).toBeDefined();
@@ -61,7 +61,7 @@ test("Hello World - Method say_hello ", async () => {
 
   init(nodeUrl, nodeToken);
   const ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "./assets/hello_world/abi.json"), "utf-8"));
-  const client = Contract.load<HelloWorld>(contractAddress, ABI);
+  const client = ContractManager.load<HelloWorld>(contractAddress, ABI);
 
   try {
     const message = await client.say_hello(account, "0");
@@ -81,7 +81,7 @@ test("Hello World - Create and Method say_hello ", async () => {
 
   init(nodeUrl, nodeToken);
   const ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "./assets/hello_world/abi.json"), "utf-8"));
-  const client = Contract.create<HelloWorld>(cidToUse, ABI);
+  const client = ContractManager.create<HelloWorld>(cidToUse, ABI);
 
   try {
     await client.new(account, "0");

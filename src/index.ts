@@ -6,10 +6,10 @@ import { attachMethods } from "./utils";
 import { INIT_ACTOR_INSTALL_METHOD, INIT_ACTOR_ADDRESS, INIT_ACTOR_CREATE_METHOD } from "./constants";
 import { ABI, Account } from "./types";
 
-export class Contract {
-  methods: { [key: string]: number } = {};
-  address: string | null = null;
-  cid: CID | null = null;
+export class ContractManager {
+  protected methods: { [key: string]: number } = {};
+  protected address: string | null = null;
+  protected cid: CID | null = null;
 
   static async install(account: any, binaryPath: string): Promise<{ cid: CID; isInstalled: boolean }> {
     if (!fs.existsSync(binaryPath)) throw new Error(`file ${binaryPath} does not exist`);
@@ -39,7 +39,7 @@ export class Contract {
   }
 
   static load<T>(address: string, { functions, types }: ABI): T {
-    const instance = new Contract();
+    const instance = new ContractManager();
     instance.address = address;
 
     attachMethods(instance, functions, types);
@@ -48,7 +48,7 @@ export class Contract {
   }
 
   static create<T>(cid: CID, { functions, types }: ABI): T {
-    const instance = new Contract();
+    const instance = new ContractManager();
     instance.cid = cid;
 
     attachMethods(instance, functions, types);

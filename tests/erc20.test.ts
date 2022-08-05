@@ -3,10 +3,10 @@ import path from "path";
 import { keyDerive } from "@zondax/filecoin-signing-tools/js";
 import { Contract as ERC20 } from "./assets/erc20/definition";
 
-jest.setTimeout(60 * 1000);
-
 import { init } from "../src/client";
-import { Contract } from "../src/index";
+import { ContractManager } from "../src/index";
+
+jest.setTimeout(60 * 1000);
 
 const ADDRESS_ID_1 = "1006";
 
@@ -32,7 +32,7 @@ test("ERC20 - Install actor", async () => {
   const account = keyDerive(seed, "m/44'/461'/0/0/1", "");
 
   init(nodeUrl, nodeToken);
-  const resp = await Contract.install(account, path.join(__dirname, "./assets/erc20/binary.wasm"));
+  const resp = await ContractManager.install(account, path.join(__dirname, "./assets/erc20/binary.wasm"));
   const { cid, isInstalled } = resp;
 
   expect(cid).toBeDefined();
@@ -47,7 +47,16 @@ test("ERC20 - Create actor", async () => {
   const account = keyDerive(seed, "m/44'/461'/0/0/1", "");
 
   init(nodeUrl, nodeToken);
-  const resp = await Contract.instantiate(account, cidToUse, "0", "ZondaxCoin", "ZDX", 18, 1000000, ADDRESS_ID_1);
+  const resp = await ContractManager.instantiate(
+    account,
+    cidToUse,
+    "0",
+    "ZondaxCoin",
+    "ZDX",
+    18,
+    1000000,
+    ADDRESS_ID_1
+  );
   const { IDAddress, RobustAddress } = resp;
 
   expect(IDAddress).toBeDefined();
@@ -63,7 +72,7 @@ test("ERC20 - Method GetSymbol", async () => {
 
   init(nodeUrl, nodeToken);
   const ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "./assets/erc20/abi.json"), "utf-8"));
-  const client = Contract.load<ERC20>(contractAddress, ABI);
+  const client = ContractManager.load<ERC20>(contractAddress, ABI);
 
   try {
     const message = await client.GetSymbol(account, "0");
@@ -83,7 +92,7 @@ test("ERC20 - Create and Method GetSymbol ", async () => {
 
   init(nodeUrl, nodeToken);
   const ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "./assets/erc20/abi.json"), "utf-8"));
-  const client = Contract.create<ERC20>(cidToUse, ABI);
+  const client = ContractManager.create<ERC20>(cidToUse, ABI);
 
   try {
     await client.new(account, "0", "ZondaxCoin", "ZDX", 18, 1000000, ADDRESS_ID_1);
