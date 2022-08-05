@@ -4,7 +4,28 @@
       "name": "new",
       "type": "function",
       "index": 1,
-      "args": [],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "name": "decimal",
+          "type": "u8"
+        },
+        {
+          "name": "totalSupply",
+          "type": "u64"
+        },
+        {
+          "name": "ownerAddr",
+          "type": "string"
+        }
+      ],
       "return": [
         {
           "type": "string"

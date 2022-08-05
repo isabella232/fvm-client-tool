@@ -1,5 +1,5 @@
 interface Contract {
-  new: () => [string, string];
+  new: (name: string, symbol: string, decimal: number, totalSupply: number, ownerAddr: string) => [string, string];
   GetName: (data: Param) => string;
   GetSymbol: () => string;
   GetDecimal: () => string;
