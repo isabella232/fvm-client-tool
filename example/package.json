@@ -15,6 +15,6 @@
   },
   "dependencies": {
     "@zondax/filecoin-signing-tools": "^1.1.0",
-    "@zondax/fvm-client-tool": "^0.2.0"
+    "@zondax/fvm-client-tool": "^0.3.0"
   }
 }
