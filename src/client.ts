@@ -1,5 +1,7 @@
 // @ts-ignore
-import { FilecoinRPC, transactionSign } from "@zondax/filecoin-signing-tools/js";
+import { transactionSign } from "@zondax/filecoin-signing-tools/js";
+// @ts-ignore
+import FilecoinRPC from "@zondax/filecoin-signing-tools/rpc";
 
 import { Account } from "./types";
 
